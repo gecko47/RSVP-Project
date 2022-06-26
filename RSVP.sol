@@ -41,8 +41,10 @@ contract RSVP {
 
     function eventStartCheckIn(address payable guest) public onlyHost {
         for (uint i = 0; i < rsvpAddresses.length; i++) {
-            if (guest == rsvpAddresses[i])
-            guest.transfer(1 ether);
+            if (guest == rsvpAddresses[i]) {
+            (bool sent, ) = guest.call{value: 1 ether}("");
+            require(sent, "Failed to send Ether");
+            }
             checkedInAddresses.push(guest);
         }
     }
